@@ -1,6 +1,6 @@
 package com.refresh.pos.ui.component;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 /**
  * Fragment which is able to call update() from other class.
