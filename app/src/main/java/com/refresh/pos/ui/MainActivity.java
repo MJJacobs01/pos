@@ -119,6 +119,16 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+			if (fragment != null) {
+				fragment.onActivityResult(requestCode, resultCode, data);
+			}
+		}
+	}
+
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			openQuitDialog();
@@ -240,18 +250,18 @@ public class MainActivity extends FragmentActivity {
 	
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.lang_en:
-            	setLanguage("en");
-                return true;
-            case R.id.lang_th:
-            	setLanguage("th");
-                return true;
-            case R.id.lang_jp:
-            	setLanguage("jp");
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        if (id == R.id.lang_en) {
+            setLanguage("en");
+            return true;
+        } else if (id == R.id.lang_th) {
+            setLanguage("th");
+            return true;
+        } else if (id == R.id.lang_jp) {
+            setLanguage("jp");
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 	

@@ -192,14 +192,14 @@ public class ProductDetailActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
+		int id = item.getItemId();
+		if (id == android.R.id.home) {
 			this.finish();
 			return true;
-		case R.id.action_edit:
+		} else if (id == R.id.action_edit) {
 			edit();
 			return true;
-		default:
+		} else {
 			return super.onOptionsItemSelected(item);
 		}
 	}
