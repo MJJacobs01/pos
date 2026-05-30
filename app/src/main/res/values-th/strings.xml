@@ -28,6 +28,10 @@
     <string name="inventory">คลังสินค้า</string>
     <string name="sale">การขาย</string>
     <string name="report">รายงานการขาย</string>
+
+    <string name="tab_inventory">คลังสินค้า</string>
+    <string name="tab_sale">การขาย</string>
+    <string name="tab_report">รายงานการขาย</string>
     
     <string name="dialog_quit">คุณต้องการออกหรือไม่?</string>
     <string name="dialog_remove_product">คุณต้องการลบสินค้าชิ้นนี้หรือไม่?</string>

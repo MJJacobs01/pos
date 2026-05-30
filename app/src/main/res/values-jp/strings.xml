@@ -28,6 +28,10 @@
     <string name="inventory">在荷</string>
     <string name="sale">売却</string>
     <string name="report">報告</string>
+
+    <string name="tab_inventory">在荷</string>
+    <string name="tab_sale">売却</string>
+    <string name="tab_report">報告</string>
     
     <string name="dialog_quit">本当に終了してもよろしいですか？</string>
     <string name="dialog_remove_product">あなたはこの製品を削除してもよろしいですか？</string>
