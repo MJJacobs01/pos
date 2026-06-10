@@ -33,7 +33,7 @@ import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -153,12 +153,12 @@ fun MainScreen(
                         }
                     }
                 )
-                SearchBar(
+                SearchBarDefaults.InputField(
                     query = inventoryState.searchQuery,
                     onQueryChange = { inventoryViewModel.onSearchQueryChange(it) },
                     onSearch = { inventoryViewModel.onSearchQueryChange(it) },
-                    active = false,
-                    onActiveChange = {},
+                    expanded = false,
+                    onExpandedChange = {},
                     placeholder = { Text(stringResource(R.string.hint_search)) },
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
                     trailingIcon = {
@@ -166,8 +166,10 @@ fun MainScreen(
                             Icon(Icons.Default.QrCodeScanner, contentDescription = "Scan")
                         }
                     },
-                    modifier = Modifier.fillMaxWidth()
-                ) {}
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                )
             }
         } else {
             TopAppBar(

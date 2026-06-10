@@ -9,8 +9,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface StockSumDao {
 
-    @Upsert(entity = StockSumEntity::class)
-    suspend fun insertOrUpdate(productId: Long, quantity: Int)
+    @Upsert
+    suspend fun upsert(stockSum: StockSumEntity)
+
+    suspend fun insertOrUpdate(productId: Long, quantity: Int) =
+        upsert(StockSumEntity(productId = productId, quantity = quantity))
 
     @Query("SELECT * FROM stock_sum WHERE _id = :productId")
     fun getByProductId(productId: Long): Flow<StockSumEntity?>
