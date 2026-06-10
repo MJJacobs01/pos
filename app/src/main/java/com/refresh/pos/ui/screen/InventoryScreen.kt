@@ -1,22 +1,18 @@
 package com.refresh.pos.ui.screen
 
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -36,6 +32,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.refresh.pos.R
 import com.refresh.pos.domain.model.Product
+import com.refresh.pos.ui.components.EmptyState
+import com.refresh.pos.ui.components.ProductListItem
 import com.refresh.pos.ui.viewmodel.InventoryViewModel
 
 @Composable
@@ -61,37 +59,22 @@ fun InventoryScreen(
 
     Box(modifier = modifier.fillMaxSize()) {
         if (uiState.products.isEmpty() && !uiState.isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "No products",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            EmptyState(
+                icon = Icons.Default.Inventory2,
+                message = "No products yet.\nTap + to add your first product."
+            )
         } else {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 88.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 items(uiState.products, key = { it.id }) { product ->
-                    Column(
-                        modifier = Modifier.combinedClickable(
-                            onClick = { onProductTapped(product.id, product.unitPrice) },
-                            onLongClick = { longPressProduct = product }
-                        )
-                    ) {
-                        ListItem(
-                            headlineContent = { Text(product.name) },
-                            supportingContent = {
-                                Row {
-                                    Text(product.barcode)
-                                    Spacer(modifier = Modifier.width(16.dp))
-                                    Text(stringResource(R.string.unit_price))
-                                    Text(product.unitPrice.toString())
-                                }
-                            }
-                        )
-                    }
+                    ProductListItem(
+                        product = product,
+                        onClick = { onProductTapped(product.id, product.unitPrice) },
+                        onLongClick = { longPressProduct = product }
+                    )
                 }
             }
         }
@@ -186,18 +169,16 @@ private fun InventoryScreenPreview() {
     )
     com.refresh.pos.ui.theme.PosTheme {
         Box(modifier = Modifier.fillMaxSize()) {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 items(fakeProducts) { product ->
-                    ListItem(
-                        headlineContent = { Text(product.name) },
-                        supportingContent = {
-                            Row {
-                                Text(product.barcode)
-                                Spacer(modifier = Modifier.width(16.dp))
-                                Text("Unit Price")
-                                Text(product.unitPrice.toString())
-                            }
-                        }
+                    ProductListItem(
+                        product = product,
+                        onClick = { },
+                        onLongClick = { }
                     )
                 }
             }

@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -38,6 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.refresh.pos.R
+import com.refresh.pos.ui.components.SectionCard
+import com.refresh.pos.ui.components.SectionHeader
+import com.refresh.pos.ui.components.formatMoney
 import com.refresh.pos.ui.viewmodel.ProductDetailViewModel
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -101,9 +103,8 @@ fun ProductDetailScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             item {
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        if (uiState.isEditing) {
+                SectionCard {
+                    if (uiState.isEditing) {
                             OutlinedTextField(
                                 value = uiState.editName,
                                 onValueChange = { viewModel.onEditNameChange(it) },
@@ -137,37 +138,31 @@ fun ProductDetailScreen(
                                     Text("Save")
                                 }
                             }
-                        } else {
-                            Text(product.name, style = MaterialTheme.typography.headlineSmall)
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = "Barcode: ${product.barcode}",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = "Unit Price: ${product.unitPrice}",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
+                    } else {
+                        Text(product.name, style = MaterialTheme.typography.headlineSmall)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Barcode: ${product.barcode}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "${stringResource(R.string.unit_price)}: ${formatMoney(product.unitPrice)}",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "${stringResource(R.string.stock)}: ${uiState.stockSum}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
                 }
             }
 
             item {
-                Text(
-                    text = "${stringResource(R.string.stock)}: ${uiState.stockSum}",
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
-            item {
-                Text(
-                    text = stringResource(R.string.date_added),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                SectionHeader(text = stringResource(R.string.date_added))
             }
 
             if (uiState.lots.isEmpty()) {
@@ -180,16 +175,17 @@ fun ProductDetailScreen(
                 }
             } else {
                 items(uiState.lots) { lot ->
-                    Card(modifier = Modifier.fillMaxWidth()) {
+                    SectionCard {
                         Row(
-                            modifier = Modifier.padding(16.dp),
+                            modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Column {
-                                Text(lot.dateAdded, style = MaterialTheme.typography.bodySmall)
+                                Text(lot.dateAdded, style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text("Qty: ${lot.quantity}", style = MaterialTheme.typography.bodyMedium)
                             }
-                            Text("Cost: ${lot.unitCost}", style = MaterialTheme.typography.bodyMedium)
+                            Text("Cost: ${formatMoney(lot.unitCost)}", style = MaterialTheme.typography.bodyMedium)
                         }
                     }
                 }
@@ -246,56 +242,39 @@ private fun ProductDetailScreenPreview() {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 item {
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(
-                                "Coffee",
-                                style = MaterialTheme.typography.headlineSmall
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = "Barcode: 123456789",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = "Unit Price: 85.0",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
+                    SectionCard {
+                        Text("Coffee", style = MaterialTheme.typography.headlineSmall)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Barcode: 123456789",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Unit Price: 85.00",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text("Stock: 150", style = MaterialTheme.typography.bodyMedium)
                     }
                 }
                 item {
-                    Text("Stock: 150", style = MaterialTheme.typography.titleMedium)
+                    SectionHeader("Date Added")
                 }
                 item {
-                    Text(
-                        "Date Added",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                item {
-                    Card(modifier = Modifier.fillMaxWidth()) {
+                    SectionCard {
                         Row(
-                            modifier = Modifier.padding(16.dp),
+                            modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Column {
-                                Text(
-                                    "2026-05-30",
-                                    style = MaterialTheme.typography.bodySmall
-                                )
-                                Text(
-                                    "Qty: 100",
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
+                                Text("2026-05-30", style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text("Qty: 100", style = MaterialTheme.typography.bodyMedium)
                             }
-                            Text(
-                                "Cost: 50.0",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
+                            Text("Cost: 50.00", style = MaterialTheme.typography.bodyMedium)
                         }
                     }
                 }

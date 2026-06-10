@@ -2,31 +2,30 @@ package com.refresh.pos.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.refresh.pos.R
+import com.refresh.pos.ui.components.EmptyState
+import com.refresh.pos.ui.components.SaleLineItemCard
+import com.refresh.pos.ui.components.TotalBar
 import com.refresh.pos.ui.viewmodel.SaleViewModel
 
 @Composable
@@ -39,72 +38,34 @@ fun SaleScreen(
 
     Column(modifier = modifier.fillMaxSize()) {
         if (uiState.isEmpty) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.hint_empty_sale),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            EmptyState(
+                icon = Icons.Default.ShoppingCart,
+                message = stringResource(R.string.hint_empty_sale),
+                modifier = Modifier.weight(1f)
+            )
         } else {
             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(uiState.lineItems, key = { it.id }) { item ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(12.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(item.productName, style = MaterialTheme.typography.bodyLarge)
-                                Text(item.productBarcode, style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                Text("${stringResource(R.string.quantity)}: ${item.quantity}",
-                                    style = MaterialTheme.typography.bodyMedium)
-                            }
-                            Column(horizontalAlignment = Alignment.End) {
-                                Text("${item.priceAtSale}", style = MaterialTheme.typography.bodySmall)
-                                Text(
-                                    text = item.totalPrice.toString(),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                    }
+                    SaleLineItemCard(
+                        name = item.productName,
+                        quantity = item.quantity,
+                        priceAtSale = item.priceAtSale,
+                        totalPrice = item.totalPrice,
+                        onClick = { viewModel.showEditSheet(item) }
+                    )
                 }
             }
-
-            Text(
-                text = "${stringResource(R.string.total)}: %.2f".format(uiState.total),
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            )
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        TotalBar(
+            label = stringResource(R.string.total),
+            total = uiState.total
         ) {
             OutlinedButton(
                 onClick = { viewModel.showClearDialog() },
@@ -170,98 +131,20 @@ private fun SaleScreenPreview() {
             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 item {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(12.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text("Coffee", style = MaterialTheme.typography.bodyLarge)
-                                Text(
-                                    "123456789",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                Text("Qty: 1", style = MaterialTheme.typography.bodyMedium)
-                            }
-                            Column(horizontalAlignment = Alignment.End) {
-                                Text("85.0", style = MaterialTheme.typography.bodySmall)
-                                Text(
-                                    "85.0",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                    }
+                    SaleLineItemCard(name = "Coffee", quantity = 1, priceAtSale = 85.0, totalPrice = 85.0)
                 }
                 item {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(12.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text("Milk", style = MaterialTheme.typography.bodyLarge)
-                                Text(
-                                    "987654321",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                Text("Qty: 2", style = MaterialTheme.typography.bodyMedium)
-                            }
-                            Column(horizontalAlignment = Alignment.End) {
-                                Text("45.0", style = MaterialTheme.typography.bodySmall)
-                                Text(
-                                    "90.0",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                    }
+                    SaleLineItemCard(name = "Milk", quantity = 2, priceAtSale = 45.0, totalPrice = 90.0)
                 }
             }
-            Text(
-                text = "Total: 175.00",
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                OutlinedButton(
-                    onClick = { },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Clear")
-                }
-                Button(
-                    onClick = { },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("End Sale")
-                }
+            TotalBar(label = "Total", total = 175.0) {
+                OutlinedButton(onClick = { }, modifier = Modifier.weight(1f)) { Text("Clear") }
+                Button(onClick = { }, modifier = Modifier.weight(1f)) { Text("End Sale") }
             }
         }
     }

@@ -31,6 +31,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBarDefaults
@@ -128,7 +129,7 @@ fun MainScreen(
     val topBar = @Composable {
         if (selectedTab == 0) {
             Column {
-                TopAppBar(
+                CenterAlignedTopAppBar(
                     title = { Text(stringResource(tabs[selectedTab].titleRes)) },
                     actions = {
                         IconButton(onClick = { showOverflowMenu = true }) {
@@ -172,7 +173,7 @@ fun MainScreen(
                 )
             }
         } else {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = { Text(stringResource(tabs[selectedTab].titleRes)) },
                 actions = {
                     IconButton(onClick = { showOverflowMenu = true }) {

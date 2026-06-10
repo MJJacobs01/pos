@@ -1,8 +1,6 @@
 package com.refresh.pos.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,6 +28,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.refresh.pos.R
 import com.refresh.pos.domain.model.LineItem
+import com.refresh.pos.ui.components.SaleLineItemCard
+import com.refresh.pos.ui.components.SectionCard
+import com.refresh.pos.ui.components.formatMoney
 import androidx.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,7 +65,7 @@ fun SaleDetailScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item {
-                Column(modifier = Modifier.fillMaxWidth()) {
+                SectionCard {
                     Text(
                         text = stringResource(R.string.date),
                         style = MaterialTheme.typography.bodySmall,
@@ -77,8 +77,9 @@ fun SaleDetailScreen(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "${stringResource(R.string.total)}: %.2f".format(saleTotal),
+                        text = "${stringResource(R.string.total)}: ${formatMoney(saleTotal)}",
                         style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -94,27 +95,12 @@ fun SaleDetailScreen(
                 }
             } else {
                 items(lineItems) { item ->
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(12.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Column {
-                                Text(item.productName, style = MaterialTheme.typography.bodyLarge)
-                                Text(
-                                    "Qty: ${item.quantity} x ${item.priceAtSale}",
-                                    style = MaterialTheme.typography.bodySmall
-                                )
-                            }
-                            Text(
-                                text = item.totalPrice.toString(),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
+                    SaleLineItemCard(
+                        name = item.productName,
+                        quantity = item.quantity,
+                        priceAtSale = item.priceAtSale,
+                        totalPrice = item.totalPrice
+                    )
                 }
             }
         }
@@ -146,78 +132,30 @@ private fun SaleDetailScreenPreview() {
                     .fillMaxSize()
                     .padding(innerPadding)
                     .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 item {
-                    Column(modifier = Modifier.fillMaxWidth()) {
+                    SectionCard {
                         Text(
                             "Date",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        Text(
-                            "2026-05-30 10:00:00",
-                            style = MaterialTheme.typography.bodyLarge
-                        )
+                        Text("2026-05-30 10:00:00", style = MaterialTheme.typography.bodyLarge)
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             "Total: 175.00",
                             style = MaterialTheme.typography.headlineSmall,
+                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold
                         )
                     }
                 }
                 item {
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(12.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Column {
-                                Text(
-                                    "Coffee",
-                                    style = MaterialTheme.typography.bodyLarge
-                                )
-                                Text(
-                                    "Qty: 1 x 85.0",
-                                    style = MaterialTheme.typography.bodySmall
-                                )
-                            }
-                            Text(
-                                "85.0",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
+                    SaleLineItemCard(name = "Coffee", quantity = 1, priceAtSale = 85.0, totalPrice = 85.0)
                 }
                 item {
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(12.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Column {
-                                Text(
-                                    "Milk",
-                                    style = MaterialTheme.typography.bodyLarge
-                                )
-                                Text(
-                                    "Qty: 2 x 45.0",
-                                    style = MaterialTheme.typography.bodySmall
-                                )
-                            }
-                            Text(
-                                "90.0",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
+                    SaleLineItemCard(name = "Milk", quantity = 2, priceAtSale = 45.0, totalPrice = 90.0)
                 }
             }
         }

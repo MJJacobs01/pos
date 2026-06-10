@@ -161,7 +161,7 @@ MERGED from [com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\marthinusj\.
 	android:allowBackup
 		ADDED from C:\Users\marthinusj\Documents\Projects\TestProjects\Android\POS\app\src\main\AndroidManifest.xml:12:9-35
 	android:theme
-		ADDED from C:\Users\marthinusj\Documents\Projects\TestProjects\Android\POS\app\src\main\AndroidManifest.xml:15:9-40
+		ADDED from C:\Users\marthinusj\Documents\Projects\TestProjects\Android\POS\app\src\main\AndroidManifest.xml:15:9-41
 	android:name
 		ADDED from C:\Users\marthinusj\Documents\Projects\TestProjects\Android\POS\app\src\main\AndroidManifest.xml:11:9-39
 activity#com.refresh.pos.ui.MainActivity
@@ -169,7 +169,7 @@ ADDED from C:\Users\marthinusj\Documents\Projects\TestProjects\Android\POS\app\s
 	android:exported
 		ADDED from C:\Users\marthinusj\Documents\Projects\TestProjects\Android\POS\app\src\main\AndroidManifest.xml:19:13-36
 	android:theme
-		ADDED from C:\Users\marthinusj\Documents\Projects\TestProjects\Android\POS\app\src\main\AndroidManifest.xml:20:13-44
+		ADDED from C:\Users\marthinusj\Documents\Projects\TestProjects\Android\POS\app\src\main\AndroidManifest.xml:20:13-45
 	android:name
 		ADDED from C:\Users\marthinusj\Documents\Projects\TestProjects\Android\POS\app\src\main\AndroidManifest.xml:18:13-44
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER

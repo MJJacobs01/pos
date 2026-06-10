@@ -2,15 +2,22 @@ package com.refresh.pos.ui.screen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Storefront
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,40 +38,50 @@ fun SplashScreen(onNavigateToMain: () -> Unit) {
     var visible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        delay(2000)
+        visible = true
+        delay(1800)
         onNavigateToMain()
     }
 
-    LaunchedEffect(Unit) {
-        visible = true
-    }
-
     Scaffold { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            contentAlignment = Alignment.Center
         ) {
-            AnimatedVisibility(visible = visible, enter = fadeIn()) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            AnimatedVisibility(visible = visible, enter = fadeIn() + scaleIn(initialScale = 0.85f)) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Surface(
+                        modifier = Modifier.size(96.dp),
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.primaryContainer
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                imageVector = Icons.Default.Storefront,
+                                contentDescription = null,
+                                modifier = Modifier.size(48.dp),
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
                     Text(
                         text = "Mobile POS",
-                        fontSize = 36.sp,
+                        fontSize = 34.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Version 0.8",
-                        fontSize = 16.sp,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Spacer(modifier = Modifier.height(32.dp))
-                    Button(onClick = onNavigateToMain) {
-                        Text("Go")
-                    }
                 }
             }
         }
